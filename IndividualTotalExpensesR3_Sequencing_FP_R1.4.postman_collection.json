@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "3c32b74f-0b39-4326-9719-c403836f4f63",
-		"name": "IndividualTotalExpensesR3_Sequencing_FP_R1.4",
+		"_postman_id": "46812c1c-6c53-4fd0-9827-ef0a73042665",
+		"name": "1_IndividualTotalExpensesR3_Sequencing_FP_R1.4",
 		"description": "This collection will executes the set of three following API folders:\r\na) IndividualTotalExpensesR3 primary folder contains 7 requests:\r\n   1. IndividualTotalExpensesR3 primary -(User can change the primary input fields in this request, global varibles are set & test scripts available).\r\n   2. Expenses Present Value for ABD.\r\n   3. Expenses Present Value for ABCD.\r\n   4. Expenses Present Value for ABFD.\r\n   5. Expenses Present Value for ABGD.\r\n   6. Expenses Present Value for ABND.\r\n   7. Expenses Present Value for Surcharge.\r\nb) IndividualTotalExpensesR3 Primary folder contains 5 requests for get savings:\r\n   1. Get saving for ABD.\r\n   2. Get saving for ABCD.\r\n   3. Get saving for ABFD.\r\n   4. Get saving for ABGD.\r\n   5. Get saving for ABND.\r\nc) LongTermCareR4 Primary folder contains 5 requests:\r\n   1. LTCR4 primary API - (Test scripts available for below request).\r\n   2. Expenses Present Value for Future adult day health care.\r\n   3. Expenses Present Value for Future Home health care.\r\n   4. Expenses Present Value for Future assisted care.\r\n   5. Expenses Present Value for Future nursing care - (All the global variables are released)\r\n\r\n\r\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,9 +13,120 @@
 					"name": "IndividualTotalExpR3_Primary",
 					"event": [
 						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5980a2da-1439-439a-b497-5e4b0b9cbcad",
+								"exec": [
+									"//Input fields list for primary IndividualTotalExp and primary FamilyTotalExp:",
+									"pm.globals.set(\"birthDate\", \"01-1955\");",
+									"pm.globals.set(\"retirementYear\", \"01-2015\");",
+									"",
+									"",
+									"pm.globals.set(\"lifeExpectancy\", 70);",
+									"pm.globals.set(\"healthProfile\", '2');",
+									"pm.globals.set(\"state\", 'Colorado');",
+									"pm.globals.set(\"retirementState\", 'Colorado');",
+									"pm.globals.set(\"zipcode\", '80134');",
+									"pm.globals.set(\"dental\", 'false');",
+									"pm.globals.set(\"dentalHealthGrade\", '2');",
+									"pm.globals.set(\"singleVsMultipleMagi\", 'false'); //If this field is true the request will consider the values in the \"yearWiseMagiDetailList\" field. If the field is false the request will consider the values in the \"magiTier\" field. ",
+									"pm.globals.set(\"magiTierVsDollarAmount\", 'false'); //If this field is true the request will consider the values in the \"magiDollarAmount\" field. If the field is false it will consider the \"magiTier\" field values.",
+									"pm.globals.set(\"magiTier\", '1');",
+									"pm.globals.set(\"taxFilingStatus\", 'FILING_INDIVIDUALLY');",
+									"pm.globals.set(\"magiDollarAmount\", '80000');",
+									"pm.globals.set(\"tobacco\", 'false');",
+									"pm.globals.set(\"boughtPlanA\", 'false');",
+									"pm.globals.set(\"reserveDaysUsed\", '0');",
+									"pm.globals.set(\"planType\", \"Gold\");",
+									"pm.globals.set(\"fullYearDataForLifeExpectancyYear\", 'false');",
+									"pm.globals.set(\"yearWiseMagiDetailList\", '[{\"year\":2020 , \"magiTier\": 1, \"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"65000\"}, {\"year\":2021 , \"magiTier\": 2,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"95000\"}, {\"year\":2022 , \"magiTier\": 3,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"110000\"},  {\"year\":2023 , \"magiTier\": 4,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"140000\"},{\"year\":2024,  \"magiTier\": 5,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"200000\"}, {\"year\":2025 , \"magiTier\": 6,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"501000\"}]');",
+									"",
+									"",
+									"//Expenses PV feilds ",
+									"var Year = new Date();",
+									"var CurrentYear = Year.getFullYear();",
+									"pm.globals.set(\"pvAsOnYear1\", CurrentYear);",
+									"pm.globals.set(\"pvAsOnYear2\", 0);",
+									"pm.globals.set(\"pvAsOnYear3\", 0);",
+									"pm.globals.set(\"discount\", '6');",
+									"pm.globals.set(\"rateOfReturn1\", '2');",
+									"pm.globals.set(\"rateOfReturn2\", '4');",
+									"pm.globals.set(\"rateOfReturn3\", '6');",
+									"pm.globals.set(\"rateOfReturn4\", '8');",
+									"",
+									"//get savings fields list:",
+									"pm.globals.set(\"expenses\", 'expenses5');",
+									"pm.globals.set(\"initalSavings\", '0');",
+									"",
+									"pm.globals.set(\"duration\", '100');",
+									"// var CurrentYear - ",
+									"/*",
+									"import java.text.SimpleDateFormat;",
+									"import java.util.Date;",
+									"public class StringToDateExample1 {",
+									"public static void main(String[] args)throws Exception {",
+									"String sDate1=\"31/12/1998\";",
+									"Date date1=new SimpleDateFormat(\"dd/MM/yyyy\").parse(sDate1);",
+									"System.out.println(sDate1+\"\\t\"+date1);",
+									"}",
+									"*/",
+									"",
+									"//pm.globals.set(\"ror\", '4.5');//Investment Profile:  conservative",
+									"pm.globals.set(\"ror\", '5.5');//Investment Profile: Moderate",
+									"//pm.globals.set(\"ror\", '7.5');//Investment Profile: Aggressive",
+									"",
+									"",
+									"pm.globals.set(\"term\", 'L');",
+									"pm.globals.set(\"levelOfProtection\", '100');",
+									"",
+									"//LTC primary & Spouse fields list:",
+									"pm.globals.set(\"transactionTypeFlag\", 'false');",
+									"pm.globals.set(\"age\", '63');",
+									"pm.globals.set(\"gender\", \"M\");",
+									"pm.globals.set(\"currentLifeStyleExpenses\", '1');",
+									"pm.globals.set(\"numberOfAdultDayHealthCareLTCYears\", '2');",
+									"pm.globals.set(\"numberOfHomeCareLTCYears\", '1');",
+									"pm.globals.set(\"numberOfAssistedCareLTCYears\", '0');",
+									"pm.globals.set(\"numberOfNursingCareLTCYears\", '1');",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"/*",
+									"var singleVsMultipleMagi1 = pm.globals.get(\"singleVsMultipleMagi\");",
+									"",
+									"if (singleVsMultipleMagi1 == \"true\") {",
+									"    postman.setNextRequest(\"IndiTotalExp_Surcharge_ExpPresentValue\");",
+									"}",
+									"else {",
+									"",
+									"    postman.setNextRequest(\"null\");",
+									"}",
+									"",
+									"*/",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
 							"listen": "test",
 							"script": {
-								"id": "6be57010-1ccc-4b00-a2f6-db7b1e173456",
+								"id": "707141fb-534b-45b0-9b2d-a1dea0faa271",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -39,9 +150,9 @@
 									"//finding length from individual total exp. from response body.",
 									"fromYear = response.individualTotalExpenses[0].year; //getting the first year value from the individualTotalExpenses array from the response body.",
 									"toYear = response.individualTotalExpenses[length1 - 1].year;//getting the last year value from the individualTotalExpenses array from the response body.",
-									"",
-									"console.log(\"From Year is\", fromYear);",
-									"console.log(\"To Year is\", toYear);",
+									"console.log( \"From year is:\", fromYear);",
+									"//console.log(\"From Year is\", fromYear);",
+									"//console.log(\"To Year is\", toYear);",
 									"//printing from year and to year in the console.  ",
 									"for (var i = 0; i < length1; i++) //for loop executes a set of statement until the given condition is true, once the condition is false it will come out of the for loop. It starts with value 0 executes the statement by increments 1(ie., i++) until it is less than the value of length1.",
 									"{",
@@ -112,7 +223,7 @@
 									"pv_expenses9 += ']'; //same as above",
 									"pv_expenses10 += ']'; //same as above",
 									"pm.globals.set(\"expenses0\", pv_expenses0); // assigning all the pv_expenses0 values to the global variable expenses0 for PV expenses",
-									"pm.globals.set(\"expenses1\", pv_expenses1); //same as above",
+									"pm.collectionVariables.set(\"expenses1\", pv_expenses1); //same as above",
 									"pm.globals.set(\"expenses2\", pv_expenses2); //same as above",
 									"pm.globals.set(\"expenses3\", pv_expenses3); //same as above",
 									"pm.globals.set(\"expenses4\", pv_expenses4); //same as above",
@@ -129,8 +240,8 @@
 									"//setting global variables fromYear and toyear.",
 									"",
 									"//printing below values in the console.",
-									"console.log(pv_expenses0);",
-									"console.log(pv_expenses1);",
+									"//console.log(pv_expenses0);",
+									"/*console.log(pv_expenses1);",
 									"console.log(pv_expenses2);",
 									"console.log(pv_expenses3);",
 									"console.log(pv_expenses4);",
@@ -139,79 +250,50 @@
 									"console.log(pv_expenses7);",
 									"console.log(pv_expenses8);",
 									"console.log(pv_expenses9);",
-									"console.log(pv_expenses10);",
+									"console.log(pv_expenses10); */",
 									"",
 									"var healthProfile = response.healthGrade;",
 									"pm.globals.set(\"healthProfile\", healthProfile);",
 									"//making two fields into one field which is healthGrade is equal to healthProfile.",
+									"",
 									"var state = response.stateName;",
 									"pm.globals.set(\"state\", state);",
-									"//making two fields into one field which is stateName is equal to state."
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "a2c305c8-0331-4d54-9c9e-e3b5efcc95cb",
-								"exec": [
-									"//Setting the global variables in the Pre-request, below input field values are for primary IndividualTotalExpensesR3.      ",
-									"pm.globals.set(\"birthDate\", \"01-1955\");",
-									"pm.globals.set(\"retirementYear\", \"01-2020\");",
-									"pm.globals.set(\"lifeExpectancy\", '70');",
-									"pm.globals.set(\"healthProfile\", '2');",
-									"pm.globals.set(\"state\", 'Colorado');",
-									"pm.globals.set(\"retirementState\", 'Colorado');",
-									"pm.globals.set(\"zipcode\", '80111');",
-									"pm.globals.set(\"dental\", 'false');",
-									"pm.globals.set(\"dentalHealthGrade\", '3');",
-									"pm.globals.set(\"singleVsMultipleMagi\", 'true'); //If this field is true the request will consider the values in the \"yearWiseMagiDetailList\" field. If the field is false the request will consider the values in the \"magiTier\" field. ",
+									"//making two fields into one field which is stateName is equal to state.",
 									"",
-									"pm.globals.set(\"magiTierVsDollarAmount\", 'true'); //If this field is true the request will consider the values in the \"magiDollarAmount\" field. If the field is false it will consider the \"magiTier\" field values.",
+									"/*",
 									"",
-									"pm.globals.set(\"magiTier\", '1');",
-									"pm.globals.set(\"taxFilingStatus\", 'FILING_INDIVIDUALLY');",
-									"pm.globals.set(\"magiDollarAmount\", '80000');",
-									"pm.globals.set(\"tobacco\", 'false');",
-									"pm.globals.set(\"boughtPlanA\", 'true');",
-									"pm.globals.set(\"reserveDaysUsed\", '0');",
-									"pm.globals.set(\"planType\", \"silver\");",
-									"pm.globals.set(\"fullYearDataForLifeExpectancyYear\", 'false');",
-									"pm.globals.set(\"yearWiseMagiDetailList\", '[{\"year\":2020 , \"magiTier\": 1, \"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"65000\"}, {\"year\":2021 , \"magiTier\": 2,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"95000\"}, {\"year\":2022 , \"magiTier\": 3,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"110000\"},  {\"year\":2023 , \"magiTier\": 4,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"140000\"},{\"year\":2024,  \"magiTier\": 5,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"200000\"}, {\"year\":2025 , \"magiTier\": 6,\"taxFilingStatus\":\"FILING_INDIVIDUALLY\", \"magiDollarAmount\":\"501000\"}]');",
+									"var response = JSON.parse(responseBody);",
+									"var length1;",
+									"length1=response.individualTotalExpenses.length;",
+									"for (var i=0;i<length1;i++)",
+									"{",
+									"var PartA=response.individualTotalExpenses[i].partAPremium+(response.individualTotalExpenses[i].partAOOP);",
+									"var PartB=response.individualTotalExpenses[i].partBPremium+(response.individualTotalExpenses[i].partBOOP);",
+									"var PartD=response.individualTotalExpenses[i].partDPremium+(response.individualTotalExpenses[i].partDOOP);",
+									"var PartC=response.individualTotalExpenses[i].partCPremium;",
 									"",
-									"//Expenses PV input fields:",
-									"var Year = new Date(); //declaring a variable for year assigning a new Date",
-									"var CurrentYear = Year.getFullYear();//fetching a current year",
-									"pm.globals.set(\"pvAsOnYear1\", CurrentYear);",
-									"//assigning the CurrentYear values to the global variable pvAsOnYear1",
-									"pm.globals.set(\"pvAsOnYear2\", 0);",
-									"pm.globals.set(\"pvAsOnYear3\", 0);",
-									"pm.globals.set(\"discount\", '6');",
-									"pm.globals.set(\"rateOfReturn1\", '2');",
-									"pm.globals.set(\"rateOfReturn2\", '4');",
-									"pm.globals.set(\"rateOfReturn3\", '6');",
-									"pm.globals.set(\"rateOfReturn4\", '8');",
+									"var totalABD=(PartA+PartB+PartD);",
+									"var totalABCD=(totalABD+PartC)",
 									"",
-									"//Expenses getsaving input feilds:",
-									"pm.globals.set(\"expenses\", 'expenses5');",
-									"pm.globals.set(\"initalSavings\", '0');",
-									"pm.globals.set(\"duration\", '32');",
-									"pm.globals.set(\"ror\", '5.5');",
-									"pm.globals.set(\"term\", 'L');",
-									"pm.globals.set(\"levelOfProtection\", '100');",
+									"console.log(\"TotalABD:\"+totalABD);",
+									"console.log(\"TotalABCD:\"+totalABCD);",
 									"",
-									"//LTCR4 Primary input fields:",
-									"pm.globals.set(\"transactionTypeFlag\", 'false');",
-									"pm.globals.set(\"age\", '63');",
-									"pm.globals.set(\"gender\", \"M\");",
-									"pm.globals.set(\"currentLifeStyleExpenses\", '1');",
-									"pm.globals.set(\"numberOfAdultDayHealthCareLTCYears\", '2');",
-									"pm.globals.set(\"numberOfHomeCareLTCYears\", '2');",
-									"pm.globals.set(\"numberOfAssistedCareLTCYears\", '1');",
-									"pm.globals.set(\"numberOfNursingCareLTCYears\", '1');",
+									"var ResponseTotalABD = response.individualTotalExpenses[i].totalABD;",
+									"var ResponseTotalABCD = response.individualTotalExpenses[i].totalABCD;",
 									"",
-									"",
+									"if ((ResponseTotalABD == totalABD) && (ResponseTotalABCD == totalABCD))",
+									"{",
+									"    console.log(\"Test is Pass\");",
+									"}",
+									"else",
+									"{",
+									"    console.log(\"Test is Fail\");",
+									"    ",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400)});",
+									"}",
+									"}",
+									"*/",
 									"",
 									""
 								],
@@ -233,7 +315,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{    \n\t  \"birthDate\":\"{{birthDate}}\",\n\t  \"retirementYear\":\"{{retirementYear}}\",\n\t  \"lifeExpectancy\":{{lifeExpectancy}},\n      \"planType\":\"{{planType}}\",\n      \"healthGrade\":{{healthProfile}},\n      \"stateName\":\"{{state}}\",\n      \"retirementState\":\"{{retirementState}}\",\n      \"zipcode\": \"{{zipcode}}\",\n      \"boughtPlanA\":\"{{boughtPlanA}}\",\n      \"fullYearDataForLifeExpectancyYear\": \"{{fullYearDataForLifeExpectancyYear}}\",\n      \"reserveDaysUsed\":{{reserveDaysUsed}},\n      \"dental\":\"{{dental}}\",\n      \"dentalHealthGrade\":{{dentalHealthGrade}},\n      \"tobacco\":\"{{tobacco}}\",\n\t  \"singleVsMultipleMagi\":\"{{singleVsMultipleMagi}}\",\n      \"magiTierVsDollarAmount\": {{magiTierVsDollarAmount}},\n      \"magiTier\":{{magiTier}},\n      \"taxFilingStatus\":\"{{taxFilingStatus}}\",\n      \"magiDollarAmount\":{{magiDollarAmount}},\n      \"yearWiseMagiDetailList\":{{yearWiseMagiDetailList}}\n      }"
+							"raw": "{  \n\t\"birthDate\": \"{{birthDate}}\",\n\t\"retirementYear\": \"{{retirementYear}}\",\n\t\"lifeExpectancy\":\"{{lifeExpectancy}}\",\n\t\"singleVsMultipleMagi\": \"{{singleVsMultipleMagi}}\",\n\t\"magiTierVsDollarAmount\": \"{{magiTierVsDollarAmount}}\",\n\t\"magiTier\": \"{{magiTier}}\",\n\t\"taxFilingStatus\": \"{{taxFilingStatus}}\",\n\t\"magiDollarAmount\": {{magiDollarAmount}},\n\t\"healthGrade\": {{healthProfile}},\n\t\"stateName\": \"{{state}}\",\n\t\"retirementState\": \"{{retirementState}}\",\n\t\"zipcode\": \"{{zipcode}}\",\n\t\"boughtPlanA\":\"{{boughtPlanA}}\",\n\t\"reserveDaysUsed\": {{reserveDaysUsed}},\n\t\"dental\":\"{{dental}}\",\n\t\"dentalHealthGrade\": {{dentalHealthGrade}},\n\t\"planType\": \"{{planType}}\",\n\t\"tobacco\":\"{{tobacco}}\",\n\t\"yearWiseMagiDetailList\":{{yearWiseMagiDetailList}},\n\t\"fullYearDataForLifeExpectancyYear\": {{fullYearDataForLifeExpectancyYear}}\n      }",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
 							"raw": "{{server}}/individualTotalExpensesR3",
@@ -331,7 +416,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "31ba0a11-c0d0-4a71-9543-1105c95b96be",
+								"id": "6ff02550-2072-478d-ae40-7eaa134bb0aa",
 								"exec": [
 									""
 								],
@@ -341,15 +426,44 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6c1bb9f3-4790-4379-95f1-e625339a8e39",
+								"id": "781e02b4-07dd-4e01-8331-9f60c1f01702",
 								"exec": [
-									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
 									"",
-									""
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of ABD for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of ABD for Primary:\", response.pvList[0].presentValue);",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"/*tests[\"status is 200\"]=(responseCode.code === 200);",
+									"if (responseCode.code === 200) {",
+									"   postman.setNextRequest(\"IndiTotalExpABGD_ExpPresentValue\");",
+									"}",
+									"else {",
+									"    postman.setNextRequest(null)",
+									"}",
+									"*/",
+									"",
+									"//postman.setNextRequest(\"IndiTotalExpABGD_ExpPresentValue\")"
 								],
 								"type": "text/javascript"
 							}
@@ -496,12 +610,22 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9fef8c1a-dbef-4657-93ad-af1250523742",
+								"id": "51a5f288-0d1f-4158-94e6-88cd5bbe74ea",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									""
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of ABCD for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of ABCD for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -509,7 +633,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "55abc720-457b-4fa5-b70b-7f7a7a191e51",
+								"id": "1643e5e3-e88d-4282-8400-6fb274a7b72e",
 								"exec": [
 									""
 								],
@@ -658,12 +782,22 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "5119c855-0466-4952-828b-28688af98164",
+								"id": "a4cb0185-c267-40cb-9ed9-12a48a69d941",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									""
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of ABFD for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of ABFD for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -671,7 +805,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "741bb363-84b7-4ef0-a42f-089556fc57de",
+								"id": "bdb3e4c7-2b76-4ca0-8190-70e7e25793fa",
 								"exec": [
 									""
 								],
@@ -820,11 +954,23 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "231baaf8-8c29-4218-aad0-11e7da68f9f2",
+								"id": "9c8a8410-66b1-40ec-82a9-a2466c5e5c43",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of ABGD for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of ABGD for Primary:\", response.pvList[0].presentValue);",
+									"",
 									""
 								],
 								"type": "text/javascript"
@@ -833,7 +979,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d9dd804a-5912-4018-84f0-b29577f6e910",
+								"id": "620f9bde-551a-4e7e-840d-4a554bb92567",
 								"exec": [
 									""
 								],
@@ -982,12 +1128,21 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a1791465-a6d7-4184-864c-687a84449784",
+								"id": "52487d57-0625-4e8b-bc44-d73d02f066ae",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									""
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of ABND for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of ABND for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -995,7 +1150,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "6d84e463-e0d9-4313-96aa-9ff8a883692a",
+								"id": "45617110-9a05-4694-9d3c-205289fcdeae",
 								"exec": [
 									""
 								],
@@ -1144,7 +1299,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "be64bab7-cbb8-4966-8f78-770da3608e3e",
+								"id": "3fae44ef-b5ae-4bfa-b6c8-633e948df27c",
 								"exec": [
 									""
 								],
@@ -1154,12 +1309,22 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f5698f52-e831-4ce7-91b5-39de4ab442d3",
+								"id": "5aadbd05-e902-484f-a346-3c914f7f58bc",
 								"exec": [
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of Surcharge for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of Surcharge for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -1305,7 +1470,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "ea02ce76-033a-4940-9f35-47b60c205118",
+						"id": "3834ca5a-a66b-4f72-836a-ace1e26fa5cd",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1315,7 +1480,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0270b87c-46bc-43f9-8a17-2ddb320a815e",
+						"id": "292407e2-9a9c-4db1-befd-b2f8734c8351",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1334,9 +1499,14 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d052aaf4-6f65-465c-9811-d16b9a8a0d79",
+								"id": "ae05130b-5ce0-4aae-b1d5-1220c4eb6247",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"console.log(\"Retirement Annual Expenses of ABD:\", response.expenses);"
 								],
 								"type": "text/javascript"
 							}
@@ -1456,9 +1626,14 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1db2630f-c6f8-40d4-bc84-12eb6fad8899",
+								"id": "7c901e4d-006a-4733-8bb2-988c6a225640",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"console.log(\"Retirement Annual Expenses of ABCD:\", response.expenses);"
 								],
 								"type": "text/javascript"
 							}
@@ -1578,9 +1753,14 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f0e8501a-6198-418e-aa36-592495f0b6f1",
+								"id": "4f02e774-65be-4f89-9d2b-ecc7417c4521",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"console.log(\"Retirement Annual Expenses of ABFD:\", response.expenses);"
 								],
 								"type": "text/javascript"
 							}
@@ -1700,9 +1880,14 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "82916daf-8c50-4d22-88bf-2503b98547eb",
+								"id": "0c0c328f-b61f-496f-8eb2-5c97a228349f",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = JSON.parse(responseBody);\r",
+									"console.log(\"Retirement Annual Expenses of ABGD:\", response.expenses);"
 								],
 								"type": "text/javascript"
 							}
@@ -1817,14 +2002,18 @@
 					]
 				},
 				{
-					"name": "IndiTotalExp_ABND__getSaving",
+					"name": "IndiTotalExp_ABND_getSaving",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "3eb8f83e-6bdd-4f75-a969-7367457a30c6",
+								"id": "611a5dab-5007-4cd0-b2df-42b38dd3c860",
 								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var response = JSON.parse(responseBody);\r",
+									"console.log(\"Retirement Annual Expenses of ABND:\", response.expenses);"
 								],
 								"type": "text/javascript"
 							}
@@ -1943,7 +2132,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4b41c7e9-fd08-4749-be82-3fda09f4ebcd",
+						"id": "16a85141-1ad0-4f55-8255-959f0fdedc35",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1953,7 +2142,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "9e055608-ac3e-4f3c-b5d7-c2a80025a85b",
+						"id": "f11908c4-36c9-4dbb-99c5-59b208fbd93e",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1972,7 +2161,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "41e7946d-7035-41ec-8c06-e85e84f6e46f",
+								"id": "db43a441-6688-490a-b9b6-5eaee744c2f0",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"  pm.response.to.have.status(200);",
@@ -1988,7 +2177,7 @@
 									"for (var i = 0; i < length1; i++) //for loop executes a set of statement until the given condition is true, once the condition is false it will come out of the for loop. It starts with value 0 executes the statement by increments 1(ie., i++) until it is less than the value of length1.",
 									" {",
 									"  var year0 = response.futureAdultDayHealthCareExpenseList[i].year;  //getting year from the response body and storing in the year based on the i value.",
-									"  var Adult = response.futureAdultDayHealthCareExpenseList[i].expense / 2;  ",
+									"  var Adult = response.futureAdultDayHealthCareExpenseList[i].expense;  ",
 									"  //getting values of futureAdultDayHealthCareExpenseList from the response body and storing in the Adult based on the i value.",
 									"  var year_expense01 = '{\"year\": ' + year0 + ' , \"expense\": ' + Adult + \"}\"; //concatenating the year and Adult expense and storing in the year_expense01",
 									"  if (i < (length1 - 1)) // if this condition is true then it will execute the below statment.",
@@ -1998,7 +2187,7 @@
 									"  pv_expenses0 += year_expense01;  //variable pv_expenses0 = pv_expenses0 + year_expense01 is stored",
 									"}",
 									"pv_expenses0 += ']'; // closing with \"]\" after the above statment.",
-									"console.log(pv_expenses0);  ",
+									"//console.log(pv_expenses0);  ",
 									"//Printing pv_expenses0 values in the console.",
 									"pm.globals.set(\"expenses0\", pv_expenses0); // assigning all the pv_expenses0 values to the global variable expenses0 for PV expenses request.",
 									"pm.globals.set(\"fromYear1\", fromYear1);",
@@ -2007,33 +2196,32 @@
 									"//----------------------------------------------------------------",
 									"",
 									"//LTCR4 futureHomeCareExpenseList primary (same as above but here we have to take different vairables and different for loops because each fields have its own arrays and length in response body).",
-									"var pv_expenses1 = \"[\"; ",
+									"var pv_expenses11 = \"[\"; ",
 									"var length2 = response.futureHomeCareExpenseList.length;",
-									"",
 									"fromYear2 = response.futureHomeCareExpenseList[0].year;",
-									"",
 									"toYear2 = response.futureHomeCareExpenseList[length2 - 1].year;",
-									"",
 									"for (var j = 0; j < length2; j++) ",
 									" {",
-									"  var year1 = response.futureHomeCareExpenseList[j].year; //",
-									"",
-									"  var Home = response.futureHomeCareExpenseList[j].expense / 2;",
-									"",
+									"  var year1 = response.futureHomeCareExpenseList[j].year; ",
+									"  var Home = response.futureHomeCareExpenseList[j].expense;",
 									"  var year_expense02 = '{\"year\": ' + year1 + ' , \"expense\": ' + Home + \"}\";",
 									"  if (j < (length2 - 1)) {",
 									"    year_expense02 += ',';",
 									"  }",
-									"  pv_expenses1 += year_expense02;",
+									"  pv_expenses11 += year_expense02;",
 									"}",
-									"pv_expenses1 += ']';",
-									"console.log(pv_expenses1);",
-									"pm.globals.set(\"expenses1\", pv_expenses1);",
+									"pv_expenses11 += ']';",
+									"console.log(pv_expenses11);",
+									"pm.globals.set(\"expenses11\", pv_expenses11);",
 									"pm.globals.set(\"fromYear2\", fromYear2);",
 									"pm.globals.set(\"toYear2\", toYear2);",
 									"",
+									"",
+									"",
+									"",
 									"//----------------------------------------------------------------",
 									"//LTCR4 futureAssistedCareExpensesList primary (same as above but here we have to take different vairables and different for loops because each fields have its own arrays and length in response body).",
+									"/*",
 									"var pv_expenses2 = \"[\";",
 									"var length3 = response.futureAssistedCareExpensesList.length;",
 									"fromYear3 = response.futureAssistedCareExpensesList[0].year;",
@@ -2050,11 +2238,12 @@
 									"  pv_expenses2 += year_expense03;",
 									"}",
 									"pv_expenses2 += ']';",
-									"console.log(pv_expenses2);",
+									"//console.log(pv_expenses2);",
 									"pm.globals.set(\"expenses2\", pv_expenses2);",
 									"pm.globals.set(\"fromYear3\", fromYear3);",
 									"pm.globals.set(\"toYear3\", toYear3);",
 									"",
+									"*/",
 									"//----------------------------------------------------------------",
 									"//LTCR4 futureNursingCareExpensesList primary (same as above but here we have to take different vairables and different for loops because each fields have its own arrays and length in response body).",
 									"var pv_expenses3 = \"[\";",
@@ -2063,7 +2252,7 @@
 									"toYear4 = response.futureNursingCareExpensesList[length4 - 1].year;",
 									"for (var p = 0; p < length4; p++) {",
 									"  var year3 = response.futureNursingCareExpensesList[p].year;",
-									"  var Nursing = response.futureNursingCareExpensesList[p].expense / 2;",
+									"  var Nursing = response.futureNursingCareExpensesList[p].expense;",
 									"  var year_expense04 = '{\"year\": ' + year3 + ' , \"expense\": ' + Nursing + \"}\";",
 									"  if (p < (length4 - 1)) {",
 									"    year_expense04 += ',';",
@@ -2071,7 +2260,7 @@
 									"  pv_expenses3 += year_expense04;",
 									"}",
 									"pv_expenses3 += ']';",
-									"console.log(pv_expenses3);",
+									"//console.log(pv_expenses3);",
 									"pm.globals.set(\"expenses3\", pv_expenses3);",
 									"pm.globals.set(\"fromYear4\", fromYear4);",
 									"pm.globals.set(\"toYear4\", toYear4);",
@@ -2083,7 +2272,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "bd28486c-ecae-4f6b-b983-7d31ebc4bfa2",
+								"id": "e63d97e7-9224-41dd-ace9-1eb35600e5c0",
 								"exec": [
 									""
 								],
@@ -2227,17 +2416,28 @@
 					]
 				},
 				{
-					"name": "LTC_FutAdultDayHealthCare_Primary_expPresentValue",
+					"name": "LTC_FutAdultDayHealthCare_Primary_PV",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "2294e787-bd1d-48a2-9025-2c9af0fc3f84",
+								"id": "8b5a0ce8-d247-4da6-b09b-c3b17cfd2e0b",
 								"exec": [
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of Adult Day Care for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of Adult Day Care for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -2245,7 +2445,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "75e769b6-9ed5-447c-a398-104a120ca16c",
+								"id": "71126788-962f-42be-86fc-e74bbed40abf",
 								"exec": [
 									""
 								],
@@ -2384,12 +2584,25 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "7941c238-b414-4d56-a362-643cefb7157e",
+								"id": "390dd6c8-3fd0-4450-9f32-cc49a82bf5c8",
 								"exec": [
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of Home Care for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of Home Day Care for Primary:\", response.pvList[0].presentValue);",
+									"",
+									"postman.setNextRequest(\"LTC_FutureNursingCare_Primary_expPresentValue\");"
 								],
 								"type": "text/javascript"
 							}
@@ -2397,7 +2610,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "7506b87b-1046-48ef-bf25-ff94cfc3d581",
+								"id": "6a6b0316-eb32-452d-85cf-be3f6b220fce",
 								"exec": [
 									""
 								],
@@ -2436,7 +2649,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \n  \"fromYear\": {{fromYear2}},\n  \"toYear\": {{toYear2}},\n  \"expenses\":{{expenses1}},\n  \"presentValueYears\": {\n    \"pvAsOnYear1\": {{pvAsOnYear1}},\n    \"pvAsOnYear2\": {{pvAsOnYear2}},\n    \"pvAsOnYear3\": {{pvAsOnYear3}}\n  },\n  \"discount\": {{discount}},\n  \"rateOfReturns\": {\n    \"rateOfReturn1\": {{rateOfReturn1}},\n    \"rateOfReturn2\": {{rateOfReturn2}},\n    \"rateOfReturn3\": {{rateOfReturn3}},\n    \"rateOfReturn4\": {{rateOfReturn4}}\n  }\n}"
+							"raw": "{ \n  \"fromYear\": {{fromYear2}},\n  \"toYear\": {{toYear2}},\n  \"expenses\":{{expenses11}},\n  \"presentValueYears\": {\n    \"pvAsOnYear1\": {{pvAsOnYear1}},\n    \"pvAsOnYear2\": {{pvAsOnYear2}},\n    \"pvAsOnYear3\": {{pvAsOnYear3}}\n  },\n  \"discount\": {{discount}},\n  \"rateOfReturns\": {\n    \"rateOfReturn1\": {{rateOfReturn1}},\n    \"rateOfReturn2\": {{rateOfReturn2}},\n    \"rateOfReturn3\": {{rateOfReturn3}},\n    \"rateOfReturn4\": {{rateOfReturn4}}\n  }\n}"
 						},
 						"url": {
 							"raw": "{{server}}/expensesPresentValue",
@@ -2536,12 +2749,23 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d21cf463-81f5-41a4-940e-e13127a12efe",
+								"id": "9ecd4178-6f7e-463e-8e9c-8263cf6abb06",
 								"exec": [
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of Assisted Care for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of Assisted Day Care for Primary:\", response.pvList[0].presentValue);"
 								],
 								"type": "text/javascript"
 							}
@@ -2549,7 +2773,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "904d9006-4dc6-4e9f-86fb-4dabf8017926",
+								"id": "58a7e8f8-9e2b-4e86-a3a2-ea70ddf68557",
 								"exec": [
 									""
 								],
@@ -2688,12 +2912,26 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d0b4bb07-a6df-493d-bd77-f40667a23f2b",
+								"id": "63c8b52f-a026-48a2-b297-f6c3ed7b0e3d",
 								"exec": [
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"console.log(\"Primary Retirement Year:\", response.fromYear);",
+									"",
+									"console.log(\"Primary Life Expectancy year:\", response.toYear);",
+									"",
+									"console.log(\"Present Value year:\", response.pvList[0].year);",
+									"",
+									"console.log(\"TotalExpense of Nursing Care for Primary (Future Dollar):\", response.pvList[0].totalExpense);",
+									"",
+									"console.log(\"Present Value of Nursing Day Care for Primary:\", response.pvList[0].presentValue);",
+									"",
+									"",
+									"",
 									"// Releasing all the global variables:",
 									"pm.globals.unset(\"initalSavings\");",
 									"pm.globals.unset(\"duration\");",
@@ -2786,7 +3024,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5a736341-9150-4b95-a973-0eff9579479c",
+								"id": "84c27ac1-28b8-4c0b-8897-7b7bc4e48444",
 								"exec": [
 									""
 								],
@@ -2924,7 +3162,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "869ed08f-816f-4aaa-827a-624d64a66476",
+						"id": "16d4585d-f140-48d5-9eb8-5a87aed13034",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -2934,7 +3172,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "51b0c8ae-f1d0-4a4c-9aa6-263010c3cb89",
+						"id": "5ab66d93-ac78-416c-928c-251187693502",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -2949,7 +3187,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "5b1e78b5-b296-4a1b-8fc2-e6b23465cb01",
+				"id": "05d2e251-73d7-4a5d-8395-61e23727c2e6",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2959,12 +3197,24 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "5e15a567-96fb-487e-b06b-ec591aac5419",
+				"id": "813bacf1-84a6-4220-bf8d-71820e11579c",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"id": "fd0fcfa4-67fe-4e8b-b3ac-3eabb50c37c5",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "1e69747e-5947-4d80-b90f-62894bf81db8",
+			"key": "expenses1",
+			"value": "[{\"year\": 2020 , \"expense\": 5652.98},{\"year\": 2021 , \"expense\": 5896.97},{\"year\": 2022 , \"expense\": 7858.49},{\"year\": 2023 , \"expense\": 6421.36},{\"year\": 2024 , \"expense\": 6702.64}]"
 		}
 	],
 	"protocolProfileBehavior": {}
