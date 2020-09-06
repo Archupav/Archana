@@ -26,7 +26,7 @@
 									"pm.globals.set(\"healthProfile\", '2');",
 									"pm.globals.set(\"state\", 'Colorado');",
 									"pm.globals.set(\"retirementState\", 'Colorado');",
-									"pm.globals.set(\"zipcode\", '80134');",
+									"pm.globals.set(\"zipcode\", '80112');",
 									"pm.globals.set(\"dental\", 'false');",
 									"pm.globals.set(\"dentalHealthGrade\", '2');",
 									"pm.globals.set(\"singleVsMultipleMagi\", 'false'); //If this field is true the request will consider the values in the \"yearWiseMagiDetailList\" field. If the field is false the request will consider the values in the \"magiTier\" field. ",
@@ -3207,12 +3207,12 @@
 	],
 	"variable": [
 		{
-			"id": "fd0fcfa4-67fe-4e8b-b3ac-3eabb50c37c5",
+			"id": "bc360c4e-8be5-450a-92fd-cc08cc36f33d",
 			"value": "",
 			"disabled": true
 		},
 		{
-			"id": "1e69747e-5947-4d80-b90f-62894bf81db8",
+			"id": "74644814-55b3-4c65-b192-5043a2c9266e",
 			"key": "expenses1",
 			"value": "[{\"year\": 2020 , \"expense\": 5652.98},{\"year\": 2021 , \"expense\": 5896.97},{\"year\": 2022 , \"expense\": 7858.49},{\"year\": 2023 , \"expense\": 6421.36},{\"year\": 2024 , \"expense\": 6702.64}]"
 		}
